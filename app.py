@@ -142,6 +142,22 @@ new_entry = {
         "Target PF": pf_target,
         "Result PF": round(actual_pf, 2)
     }
+# The 'if' statement is at the start of the line
+if submit:
+    # These lines are indented by 4 spaces
+    actual_pf = (d_mm / 100) * 1.2 
+    
+    new_entry = {
+        "Time": datetime.now().strftime("%H:%M:%S"),
+        "Dia (mm)": d_mm,
+        "UCS (MPa)": ucs,
+        "Target PF": pf_target,
+        "Result PF": round(actual_pf, 2)
+    }
+    # This line MUST match the indentation of 'new_entry'
+    st.session_state.history.insert(0, new_entry)
+    st.success("Calculation saved!")
+
     st.session_state.history.insert(0, new_entry)
     st.success("Calculation saved to history below!")
 
