@@ -67,11 +67,6 @@ if submit:
         "Result PF": round(actual_pf, 2)
     }
     # --- SIDEBAR: INPUT PARAMETERS ---
-st.sidebar.header("📥 Design Inputs")
-st.sidebar.info("DRILLING AND BLASTING DESIGNING")
-st.session_state.history.insert(0)
-st.success("Calculation saved to history below!")
-
 d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
 h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
 ucs = st.sidebar.number_input("Rock Strength (UCS) [MPa]", min_value=30.0, max_value=400.0, value=45.0)
@@ -139,9 +134,22 @@ passing = 100 * (1 - np.exp(-0.693 * (x / x50)**n_val))
 chart_data = pd.DataFrame({"Size (mm)": x, "Passing (%)": passing}).set_index("Size (mm)")
 st.line_chart(chart_data)
 st.caption("Figure: Expected Rosin-Rammler distribution for selected design.")
+# Save to History
+    new_entry = {
+        "Time": datetime.now().strftime("%H:%M:%S"),
+        "Dia (mm)": d_mm,
+        "UCS (MPa)": ucs,
+        "Target PF": pf_target,
+        "Result PF": round(actual_pf, 2)
+    }
+    st.session_state.history.insert(0, new_entry)
+    st.success("Calculation saved to history below!")
+
 # 4. Display History Table
 st.subheader("📜 Calculation History")
 if st.session_state.history:
     st.table(pd.DataFrame(st.session_state.history))
 else:
     st.info("No calculations performed yet.")
+Use code with caution.
+
