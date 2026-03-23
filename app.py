@@ -28,6 +28,53 @@ st.markdown("""
     .reportview-container .main .block-container { padding-top: 2rem; }
     </style>
     """, unsafe_allow_html=True)
+from datetime import datetime
+
+# 1. Initialize History and Input Keys
+if 'history' not in st.session_state:
+    st.session_state.history = []
+
+# Function to clear inputs by resetting session state
+def reset_inputs():
+    st.session_state.dia = 90.0
+    st.session_state.ucs_val = 45.0
+    st.session_state.pf_val = 1.0
+
+# 2. Input Form (Calculates only when "Run Calculation" is clicked)
+with st.sidebar.form("blast_form"):
+    st.header("📥 Design Inputs")
+    
+    # Inputs with manual typing + specific increments
+    d_mm = st.number_input("Hole Diameter (mm)", value=90.0, step=5.0, key="dia")
+    ucs = st.number_input("Rock Strength (UCS MPa)", value=45.0, step=10.0, key="ucs_val")
+    pf_target = st.number_input("Target Powder Factor", value=1.0, step=0.1, key="pf_val")
+    
+    # The Action Buttons
+    submit = st.form_submit_button("🚀 Run Calculation")
+    clear = st.form_submit_button("🗑️ Reset Inputs", on_click=reset_inputs)
+
+# 3. Logic: Only runs if 'submit' is clicked
+if submit:
+    # Example Math (Replace with your actual equations)
+    actual_pf = (d_mm / 100) * 1.2 
+    
+    # Save to History
+    new_entry = {
+        "Time": datetime.now().strftime("%H:%M:%S"),
+        "Dia (mm)": d_mm,
+        "UCS (MPa)": ucs,
+        "Target PF": pf_target,
+        "Result PF": round(actual_pf, 2)
+    }
+    st.session_state.history.insert(0, new_entry)
+    st.success("Calculation saved to history below!")
+
+# 4. Display History Table
+st.subheader("📜 Calculation History")
+if st.session_state.history:
+    st.table(pd.DataFrame(st.session_state.history))
+else:
+    st.info("No calculations performed yet.")
 
 # --- SIDEBAR: INPUT PARAMETERS ---
 st.sidebar.header("📥 Design Inputs")
