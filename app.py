@@ -16,7 +16,7 @@ st.markdown("""
 
 # --- SIDEBAR: INPUT PARAMETERS ---
 st.sidebar.header("📥 Design Inputs")
-st.sidebar.info("Faculty of Engineering - Mining Dept")
+st.sidebar.info("DRILLING AND BLASTING DESIGNING")
 
 d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
 h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
@@ -46,8 +46,8 @@ theoretical_charge = (np.pi * (d_m**2) / 4) * rho_anfo * lc
 actual_pf = theoretical_charge / volume
 
 # --- FRONTEND: DASHBOARD ---
-st.title("🏗️ Deterministic Empirical Blast Calculator")
-st.subheader("Conceptual Development: Group 4 (Said, Enrique, Promise)")
+st.title("🏗️ Blast Planner App")
+st.subheader("Group 4 (Malawi University Of Business and Applied Sciences)")
 
 col1, col2 = st.columns([2, 1])
 
