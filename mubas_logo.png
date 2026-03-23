@@ -1,0 +1,13 @@
+import streamlit as st
+from PIL import Image
+
+# --- ADDING THE LOGO FROM YOUR REPOSITORY ---
+try:
+    logo = Image.open("mubas_logo.png")
+    st.sidebar.image(logo, use_container_width=True)
+except:
+    st.sidebar.error("Logo file not found on GitHub. Make sure it is named 'mubas_logo.png'")
+
+st.sidebar.markdown("### **MUBAS Blast Designer**")
+st.sidebar.caption("The Home of Innovation: Innovate. Create. Generate.")
+st.sidebar.divider()
