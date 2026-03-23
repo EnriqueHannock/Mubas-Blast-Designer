@@ -1,4 +1,15 @@
 import streamlit as st
+
+# --- SCHOOL LOGO & HEADER ---
+# This uses the official MUBAS logo URL
+logo_url = "https://www.mubas.ac.mw"
+
+# Display logo in the sidebar
+st.sidebar.image(logo_url, width=200)
+st.sidebar.markdown("### **MUBAS Blast Designer**")
+st.sidebar.caption("The Home of Innovation: Innovate. Create. Generate.")
+
+import streamlit as st
 import numpy as np
 import pandas as pd
 
