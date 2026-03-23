@@ -11,6 +11,9 @@ logo_url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAP4AAACUCAMAAACEJ2RfAA
 st.sidebar.image(logo_url, use_container_width=True)
 st.sidebar.title("Mining Department")
 st.sidebar.subheader("Mining Engineering")
+ # 2. Input Form (Calculates only when "Run Calculation" is clicked)
+with st.sidebar.form("blast_form"):
+     st.header("📥 Design Inputs")
 # --- CUSTOM CSS FOR PROFESSIONAL UI ---
 
 with st.sidebar.expander("👥 Group 4 Members"):
@@ -33,9 +36,6 @@ from datetime import datetime
 # 1. Initialize History and Input Keys
 if 'history' not in st.session_state:
     st.session_state.history = []
-    # 2. Input Form (Calculates only when "Run Calculation" is clicked)
-with st.sidebar.form("blast_form"):
-     st.header("📥 Design Inputs")
      # --- SIDEBAR: INPUT PARAMETERS ---
 d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
 h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
