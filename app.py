@@ -5,7 +5,8 @@ import streamlit as st
 logo_url = "https://www.mubas.ac.mw"
 
 # Display logo in the sidebar
-st.sidebar.image(logo_url, width=200)
+st.sidebar.image(# Replace your current logo code with this one line
+st.sidebar.image("https://www.mubas.ac.mw", use_container_width=True)
 st.sidebar.markdown("### **MUBAS Blast Designer**")
 st.sidebar.caption("The Home of Innovation: Innovate. Create. Generate.")
 
