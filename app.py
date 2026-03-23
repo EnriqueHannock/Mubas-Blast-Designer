@@ -44,11 +44,6 @@ def reset_inputs():
 with st.sidebar.form("blast_form"):
     st.header("📥 Design Inputs")
     
-    # Inputs with manual typing + specific increments
-    d_mm = st.number_input("Hole Diameter (mm)", value=90.0, step=5.0, key="dia")
-    ucs = st.number_input("Rock Strength (UCS MPa)", value=45.0, step=10.0, key="ucs_val")
-    pf_target = st.number_input("Target Powder Factor", value=1.0, step=0.1, key="pf_val")
-    
     # The Action Buttons
     submit = st.form_submit_button("🚀 Run Calculation")
     clear = st.form_submit_button("🗑️ Reset Inputs", on_click=reset_inputs)
