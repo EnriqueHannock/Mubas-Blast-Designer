@@ -167,5 +167,3 @@ if st.session_state.history:
     st.table(pd.DataFrame(st.session_state.history))
 else:
     st.info("No calculations performed yet.")
-Use code with caution.
-
