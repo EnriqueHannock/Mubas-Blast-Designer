@@ -62,7 +62,7 @@ actual_pf = theoretical_charge / volume
 
 # --- FRONTEND: DASHBOARD ---
 st.title("🏗️ Blast Planner App")
-st.subheader("(Malawi University Of Business and Applied Sciences)")
+st.subheader("Malawi University Of Business and Applied Sciences")
 
 col1, col2 = st.columns([2, 1])
 
