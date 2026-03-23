@@ -33,6 +33,12 @@ from datetime import datetime
 # 1. Initialize History and Input Keys
 if 'history' not in st.session_state:
     st.session_state.history = []
+     # --- SIDEBAR: INPUT PARAMETERS ---
+d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
+h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
+ucs = st.sidebar.number_input("Rock Strength (UCS) [MPa]", min_value=30.0, max_value=400.0, value=45.0)
+pf_fixed = st.sidebar.number_input("Target Powder Factor [kg/m³]", min_value=0.1, max_value=2.0, value=1.0, step=0.1)
+rho_anfo = st.sidebar.number_input("ANFO Density [kg/m³]", value=825.0)
 
 # Function to clear inputs by resetting session state
 def reset_inputs():
@@ -61,12 +67,7 @@ if submit:
         "Target PF": pf_target,
         "Result PF": round(actual_pf, 2)
     }
-    # --- SIDEBAR: INPUT PARAMETERS ---
-d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
-h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
-ucs = st.sidebar.number_input("Rock Strength (UCS) [MPa]", min_value=30.0, max_value=400.0, value=45.0)
-pf_fixed = st.sidebar.number_input("Target Powder Factor [kg/m³]", min_value=0.1, max_value=2.0, value=1.0, step=0.1)
-rho_anfo = st.sidebar.number_input("ANFO Density [kg/m³]", value=825.0)
+    
 
 # --- BACKEND: ENGINEERING CALCULATIONS ---
 # 1. Unit Conversion
