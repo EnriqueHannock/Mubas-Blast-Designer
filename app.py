@@ -11,9 +11,6 @@ logo_url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAP4AAACUCAMAAACEJ2RfAA
 st.sidebar.image(logo_url, use_container_width=True)
 st.sidebar.title("Mining Department")
 st.sidebar.subheader("Mining Engineering")
- # 2. Input Form (Calculates only when "Run Calculation" is clicked)
-with st.sidebar.form("blast_form"):
-     st.header("📥 Design Inputs")
 # --- CUSTOM CSS FOR PROFESSIONAL UI ---
 
 with st.sidebar.expander("👥 Group 4 Members"):
