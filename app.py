@@ -17,7 +17,7 @@ with st.sidebar.expander("👥 Group 4 Members"):
     st.write("1. **Enrique Hannock**")
     st.write("2. **Saidi Ibrahim**")
     st.write("3. **Promise Magola**")
-    st.caption("Conceptual Development & Optimization")
+    st.caption("BMEN 5")
 
 st.sidebar.divider()
 
