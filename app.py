@@ -1,23 +1,26 @@
 import streamlit as st
-
-# --- SCHOOL LOGO & HEADER ---
-# This uses the official MUBAS logo URL
-logo_url = "https://www.mubas.ac.mw"
-
-# Display logo in the sidebar
-st.sidebar.image(# Replace your current logo code with this one line
-st.sidebar.image("https://www.mubas.ac.mw", use_container_width=True)
-st.sidebar.markdown("### **MUBAS Blast Designer**")
-st.sidebar.caption("The Home of Innovation: Innovate. Create. Generate.")
-
-import streamlit as st
 import numpy as np
 import pandas as pd
 
 # Page Config & Icons
 st.set_page_config(page_title="MUBAS Blast Designer", page_icon="🏗️", layout="wide")
 
+# --- SIDEBAR: LOGO & TEAM ---
+# Using the official MUBAS logo URL for guaranteed display
+logo_url = "https://www.mubas.ac.mw"
+st.sidebar.image(logo_url, use_container_width=True)
+st.sidebar.title("MUBAS Engineering")
+st.sidebar.subheader("Mining Department")
 # --- CUSTOM CSS FOR PROFESSIONAL UI ---
+
+with st.sidebar.expander("👥 Group 4 Members"):
+    st.write("1. **Said**")
+    st.write("2. **Enrique**")
+    st.write("3. **Promise**")
+    st.caption("Conceptual Development & Optimization")
+
+st.sidebar.divider()
+
 st.markdown("""
     <style>
     .main { background-color: #f5f7f9; }
