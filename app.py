@@ -63,8 +63,6 @@ if submit:
         "Target PF": pf_target,
         "Result PF": round(actual_pf, 2)
     }
-    
-
 # --- BACKEND: ENGINEERING CALCULATIONS ---
 # 1. Unit Conversion
 d_m = d_mm / 1000
