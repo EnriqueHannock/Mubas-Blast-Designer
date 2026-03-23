@@ -75,7 +75,7 @@ with col2:
 
 # --- VISUALIZATION: DUMMY HOLE IMPACT ---
 st.divider()
-st.markdown("### 📈 Predicted Fragmentation (20mm - 600mm Target)")
+st.markdown("### 📈 Predicted Fragmentation (<600mm Target)")
 # (Kuz-Ram Sim)
 x = np.linspace(0, 1000, 100)
 n_val = 1.2 # Uniformity
