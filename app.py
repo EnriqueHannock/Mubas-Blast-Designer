@@ -51,10 +51,6 @@ def reset_inputs():
     clear = st.form_submit_button("🗑️ Reset Inputs", on_click=reset_inputs)
 
 # 3. Logic: Only runs if 'submit' is clicked
-if submit:
-    # Example Math (Replace with your actual equations)
-    actual_pf = (d_mm / 100) * 1.2 
-    
     # Save to History
     new_entry = {
         "Time": datetime.now().strftime("%H:%M:%S"),
