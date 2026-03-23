@@ -64,20 +64,6 @@ actual_pf = theoretical_charge / volume
 st.title("🏗️ Blast Planner App")
 st.subheader("Group 4 (Malawi University Of Business and Applied Sciences)")
 
-# --- FOOTER BOX AT THE BOTTOM OF MAIN PAGE ---
-st.markdown("---")
-with st.container():
-    col_a, col_b = st.columns([1, 4])
-    with col_a:
-        st.image("https://img.icons8.com") # A generic group icon
-    with col_b:
-        st.subheader("Project Identification")
-        st.info("""
-        **Course:** Mining Engineering - Blast Design  
-        **Institution:** Malawi University of Business and Applied Sciences (MUBAS)  
-        **Team:** Group 4 (Said, Enrique, Promise)
-        """)
-
 col1, col2 = st.columns([2, 1])
 
 with col1:
