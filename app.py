@@ -59,6 +59,28 @@ actual_pf = theoretical_charge / volume
 # --- FRONTEND: DASHBOARD ---
 st.title("🏗️ Blast Planner App")
 st.subheader("Group 4 (Malawi University Of Business and Applied Sciences)")
+# --- GROUP MEMBERS SECTION ---
+st.sidebar.divider() # Adds a line in the sidebar
+with st.sidebar.expander("👥 Project Team Members"):
+    st.write("**MUBAS Engineering - Group 4**")
+    st.write("1. **Said**")
+    st.write("2. **Enrique**")
+    st.write("3. **Promise**")
+    st.caption("Conceptual Development & Optimization")
+
+# --- FOOTER BOX AT THE BOTTOM OF MAIN PAGE ---
+st.markdown("---")
+with st.container():
+    col_a, col_b = st.columns([1, 4])
+    with col_a:
+        st.image("https://img.icons8.com") # A generic group icon
+    with col_b:
+        st.subheader("Project Identification")
+        st.info("""
+        **Course:** Mining Engineering - Blast Design  
+        **Institution:** Malawi University of Business and Applied Sciences (MUBAS)  
+        **Team:** Group 4 (Said, Enrique, Promise)
+        """)
 
 col1, col2 = st.columns([2, 1])
 
