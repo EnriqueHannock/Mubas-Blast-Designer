@@ -69,7 +69,7 @@ if submit:
     # --- SIDEBAR: INPUT PARAMETERS ---
 st.sidebar.header("📥 Design Inputs")
 st.sidebar.info("DRILLING AND BLASTING DESIGNING")
-st.session_state.history.insert(0, new_entry)
+st.session_state.history.insert(0)
 st.success("Calculation saved to history below!")
 
 d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
