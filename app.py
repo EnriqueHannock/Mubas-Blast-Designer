@@ -33,7 +33,7 @@ from datetime import datetime
 # 1. Initialize History and Input Keys
 if 'history' not in st.session_state:
     st.session_state.history = []
-     st.header("📥 Design Inputs")
+    st.header("📥 Design Inputs")
      # --- SIDEBAR: INPUT PARAMETERS ---
 d_mm = st.sidebar.number_input("Hole Diameter (D) [mm]", min_value=32.0, max_value=400.0, value=90.0)
 h_total = st.sidebar.number_input("Total Hole Depth (H) [m]", min_value=1.0, value=9.0)
