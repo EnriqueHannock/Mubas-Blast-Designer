@@ -1,72 +1,56 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from datetime import datetime
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import io
 
-# ---------------- PAGE CONFIG ----------------
+# 1. Page Setup
 st.set_page_config(page_title="MUBAS Blast Designer", page_icon="🏗️", layout="wide")
 
-# ---------------- SESSION STATE ----------------
+# 2. Session State for History
 if 'history' not in st.session_state:
     st.session_state.history = []
 
-# Default values for reset
-if 'd_mm' not in st.session_state: st.session_state.d_mm = 90.0
-if 'h_total' not in st.session_state: st.session_state.h_total = 9.0
-if 'ucs' not in st.session_state: st.session_state.ucs = 45.0
-if 'pf_fixed' not in st.session_state: st.session_state.pf_fixed = 1.0
-if 'rho_anfo' not in st.session_state: st.session_state.rho_anfo = 825.0
-
-# PDF generator function
+# --- PDF Generator Function ---
 def create_pdf(data):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer)
     styles = getSampleStyleSheet()
-    content = []
-
-    content.append(Paragraph("MUBAS Blast Design Report", styles['Title']))
-    content.append(Spacer(1, 12))
-    content.append(Paragraph(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", styles['Normal']))
-    content.append(Spacer(1, 12))
-
+    content = [Paragraph("MUBAS Blast Design Report", styles['Title']), Spacer(1, 12)]
     for key, value in data.items():
         content.append(Paragraph(f"<b>{key}</b>: {value}", styles['Normal']))
         content.append(Spacer(1, 8))
-
     doc.build(content)
     buffer.seek(0)
     return buffer
 
-# ---------------- SIDEBAR ----------------
+# --- SIDEBAR ---
 with st.sidebar:
-    # Official MUBAS Logo Link
+    # Reliable Logo Link
     st.image("https://www.mubas.ac.mw", use_container_width=True)
     st.title("Mining Engineering")
     
     with st.form("input_form"):
-        st.subheader("🔧 Input Parameters")
-        
-        # Increments: 5 for Dia, 10 for UCS, 0.1 for PF
-        d_mm = st.number_input("Hole Diameter (mm)", 32.0, 400.0, step=5.0, key="d_mm")
-        h_total = st.number_input("Hole Depth (m)", 1.0, 50.0, step=0.5, key="h_total")
-        ucs = st.number_input("Rock Strength UCS (MPa)", 30.0, 400.0, step=10.0, key="ucs")
-        pf_fixed = st.number_input("Target PF (kg/m³)", 0.1, 2.0, step=0.1, key="pf_fixed")
-        rho_anfo = st.number_input("ANFO Density (kg/m³)", key="rho_anfo")
-
-        submit = st.form_submit_button("🚀 Calculate")
+        st.subheader("🔧 Design Parameters")
+        d_mm = st.number_input("Hole Diameter (mm)", 32.0, 400.0, value=90.0, step=5.0)
+        h_total = st.number_input("Hole Depth (m)", 1.0, 50.0, value=9.0, step=0.5)
+        ucs = st.number_input("Rock Strength UCS (MPa)", 30.0, 400.0, value=45.0, step=10.0)
+        pf_target = st.number_input("Target PF (kg/m³)", 0.1, 2.0, value=1.0, step=0.1)
+        rho_anfo = st.number_input("ANFO Density (kg/m³)", value=825.0)
+        submit = st.form_submit_button("🚀 Calculate & Predict")
 
     with st.expander("👥 Group 4 Members"):
         st.write("Enrique Hannock, Saidi Ibrahim, Promise Magola")
 
-# ---------------- MAIN APP ----------------
+# --- MAIN INTERFACE ---
 st.title("🏗️ Blast Planner App")
 st.subheader("Malawi University of Business and Applied Sciences")
 
 if submit:
-    # -------- CALCULATIONS --------
+    # 1. CALCULATIONS
     d_m = d_mm / 1000
     kb, ks = 25, 1.25
     burden = kb * d_m
@@ -74,79 +58,64 @@ if submit:
     stemming = 0.7 * burden
     lc = h_total - stemming
     volume = burden * spacing * h_total
-    theoretical_charge = (np.pi * (d_m**2) / 4) * rho_anfo * lc
-    actual_pf = theoretical_charge / volume
+    charge_weight = (np.pi * (d_m**2) / 4) * rho_anfo * lc
+    actual_pf = charge_weight / volume
 
-    # -------- RESULTS DISPLAY --------
-    col1, col2 = st.columns([2, 1])
+    # 2. DISPLAY METRICS
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Burden (B)", f"{burden:.2f} m")
+    col2.metric("Spacing (S)", f"{spacing:.2f} m")
+    col3.metric("Actual PF", f"{actual_pf:.2f} kg/m³")
 
-    with col1:
+    # 3. GEOMETRY TABLE & SUMMARY
+    c1, c2 = st.columns([1, 1])
+    with c1:
         st.markdown("### 📊 Blast Geometry")
-        results_df = pd.DataFrame({
-            "Parameter": ["Burden (B)", "Spacing (S)", "Stemming (T)", "Charged Length (Lc)", "Volume"],
-            "Value": [f"{burden:.2f} m", f"{spacing:.2f} m", f"{stemming:.2f} m", f"{lc:.2f} m", f"{volume:.2f} m³"]
+        df = pd.DataFrame({
+            "Parameter": ["Stemming (T)", "Charge Length (Lc)", "Volume/Hole", "Charge/Hole"],
+            "Value": [f"{stemming:.2f} m", f"{lc:.2f} m", f"{volume:.2f} m³", f"{charge_weight:.2f} kg"]
         })
-        st.table(results_df)
+        st.table(df)
+        
+        # PDF Download
+        report_data = {"Dia": d_mm, "Burden": f"{burden:.2f}m", "Spacing": f"{spacing:.2f}m", "PF": f"{actual_pf:.2f}"}
+        pdf_file = create_pdf(report_data)
+        st.download_button("📄 Download PDF Report", data=pdf_file, file_name="blast_report.pdf")
 
-    with col2:
-        st.markdown("### 🧨 Explosives")
-        st.metric("Charge per Hole", f"{theoretical_charge:.2f} kg")
-        st.metric("Actual PF", f"{actual_pf:.2f} kg/m³")
+    with c2:
+        st.markdown("### 📍 Pattern Visualization")
+        fig, ax = plt.subplots(figsize=(4,3))
+        ax.scatter([0, spacing, 0, spacing], [0, 0, burden, burden], color='red', s=100, label='Holes')
+        ax.scatter(spacing/2, burden/2, color='blue', marker='x', s=100, label='Dummy')
+        ax.set_title("Drill Grid (3.0x2.5 concept)")
+        st.pyplot(fig)
 
-        if stemming > (0.4 * h_total):
-            st.warning("⚠️ Stemming too high!")
-        if abs(actual_pf - pf_fixed) > 0.2:
-            st.error("❌ Powder Factor mismatch")
-        else:
-            st.success("✅ Design OK")
-
-    # -------- SAVE HISTORY --------
-    entry = {
-        "Time": datetime.now().strftime("%H:%M:%S"),
-        "Dia (mm)": d_mm,
-        "UCS": ucs,
-        "Target PF": pf_fixed,
-        "Actual PF": round(actual_pf, 2)
-    }
-    st.session_state.history.insert(0, entry)
-
-    # -------- PDF REPORT --------
+    # 4. PREDICTION GRAPH (Fragmentation)
     st.divider()
-    st.subheader("📄 Generate Report")
-    report_data = {
-        "Hole Diameter (mm)": f"{d_mm}",
-        "Hole Depth (m)": f"{h_total}",
-        "Burden (m)": f"{burden:.2f}",
-        "Spacing (m)": f"{spacing:.2f}",
-        "Stemming (m)": f"{stemming:.2f}",
-        "Charge (kg)": f"{theoretical_charge:.2f}",
-        "Powder Factor": f"{actual_pf:.2f}"
-    }
+    st.subheader("📈 Predicted Fragmentation (20-600mm)")
+    x_sizes = np.linspace(1, 1000, 100)
+    x50 = 350 * (ucs/45)**0.5 # Dynamic X50 based on UCS
+    n_uniformity = 1.3
+    passing = 100 * (1 - np.exp(-0.693 * (x_sizes / x50)**n_uniformity))
     
-    pdf_file = create_pdf(report_data)
-    st.download_button(
-        label="⬇️ Download PDF Report",
-        data=pdf_file,
-        file_name=f"Blast_Report_{datetime.now().strftime('%H%M%S')}.pdf",
-        mime="application/pdf"
-    )
+    chart_data = pd.DataFrame({"Size (mm)": x_sizes, "Passing (%)": passing}).set_index("Size (mm)")
+    st.line_chart(chart_data)
+    
+    # Target success logic
+    p600 = 100 * (1 - np.exp(-0.693 * (600 / x50)**n_uniformity))
+    p20 = 100 * (1 - np.exp(-0.693 * (20 / x50)**n_uniformity))
+    st.write(f"**Target Success:** {p600-p20:.1f}% of rock fits the 20-600mm range.")
 
-    # -------- FRAGMENTATION --------
-    st.divider()
-    st.subheader("📈 Fragmentation Curve (20-600mm Target)")
-    x = np.linspace(1, 1000, 200)
-    n, x50 = 1.2, 350
-    passing = 100 * (1 - np.exp(-0.693 * (x / x50)**n))
-    chart_df = pd.DataFrame({"Size (mm)": x, "Passing (%)": passing}).set_index("Size (mm)")
-    st.line_chart(chart_df)
+    # 5. SAVE TO HISTORY
+    st.session_state.history.insert(0, {"Time": datetime.now().strftime("%H:%M"), "Dia": d_mm, "UCS": ucs, "PF": round(actual_pf, 2)})
 
-# -------- HISTORY --------
+# --- HISTORY SECTION (Always visible) ---
 st.divider()
 st.subheader("📜 Calculation History")
 if st.session_state.history:
-    st.table(pd.DataFrame(st.session_state.history))
-    if st.button("🗑️ Clear History"):
+    st.dataframe(pd.DataFrame(st.session_state.history), use_container_width=True)
+    if st.button("🗑️ Clear"):
         st.session_state.history = []
         st.rerun()
 else:
-    st.info("No calculations performed yet.")
+    st.info("Fill the sidebar and click 'Calculate' to see results.")
