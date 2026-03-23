@@ -6,9 +6,16 @@ from datetime import datetime
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import io
+from PIL import Image
 
-# 1. Page Configuration
-st.set_page_config(page_title="MUBAS Blast Designer", page_icon="🏗️", layout="wide")
+# 1. Page Configuration (Browser Tab Icon set to your Excavator file)
+try:
+    # This replaces the crane emoji in the browser tab
+    icon_img = Image.open("excavator.png")
+    st.set_page_config(page_title="MUBAS Blast Designer", page_icon=icon_img, layout="wide")
+except Exception:
+    # Fallback if image isn't found
+    st.set_page_config(page_title="MUBAS Blast Designer", page_icon="🚜", layout="wide")
 
 # 2. Session State for History
 if 'history' not in st.session_state:
@@ -32,14 +39,25 @@ def create_pdf(data):
     buffer.seek(0)
     return buffer
 
-# --- HEADER SECTION (LOGO & WELCOME) ---
-col_logo, col_welcome = st.columns([1, 4])
+# --- HEADER SECTION (LOGO, EXCAVATOR ICON & WELCOME) ---
+col_logo, col_excavator, col_welcome = st.columns([1, 1, 4])
+
 with col_logo:
-    st.image("https://www.mubas.ac.mw", width=140)
+    # University Logo
+    st.image("https://www.mubas.ac.mw", width=110)
+
+with col_excavator:
+    # Professional Excavator Icon (Replacing the crane emoji 🏗️)
+    try:
+        excavator_img = Image.open("excavator.png")
+        st.image(https://www.vecteezy.com/vector-art/30346238-excavator-vector-icon, width=110)
+    except Exception:
+        st.write("🚜 **Excavator Icon**")
 
 with col_welcome:
-    st.title("🏗️ MUBAS Blast Planner")
-    st.info("👋 **Welcome to the Deterministic Empirical Blast Designer.** Enter your drill parameters below to generate a high-precision fragmentation model. *Innovate. Create. Generate.*")
+    # Main Header without crane emoji
+    st.title("MUBAS Blast Planner")
+    st.info("👋 **Welcome to the Production Blast Designer.** Adjust your parameters below for standard or decked charging models. *Innovate. Create. Generate.*")
 
 # --- GROUP MEMBERS (TOP GRID) ---
 st.markdown("#### 👥 Project Team: Group 4 (BMEN 5)")
@@ -51,48 +69,60 @@ tm3.write("👤 **Promise Magola**")
 st.divider()
 
 # --- INPUT SECTION (LANDING PAGE GRID) ---
-st.markdown("### 📥 Design Inputs 🛠️")
+st.markdown("### 📥 Design Inputs")
 with st.form("input_form"):
     col_in1, col_in2, col_in3 = st.columns(3)
     
     with col_in1:
-        # Step=5.0 for Diameter
         d_mm = st.number_input("Hole Diameter (mm)", 32.0, 400.0, value=90.0, step=5.0)
-        h_total = st.number_input("Hole Depth (m)", 1.0, 50.0, value=9.0, step=0.5)
+        h_bench = st.number_input("Bench Height (m)", 1.0, 50.0, value=9.0, step=0.5)
+        ucs = st.number_input("Rock Strength UCS (MPa)", 30.0, 400.0, value=45.0, step=10.0)
     
     with col_in2:
-        # Step=10.0 for UCS
-        ucs = st.number_input("Rock Strength UCS (MPa)", 30.0, 400.0, value=45.0, step=10.0)
         rho_anfo = st.number_input("ANFO Density (kg/m³)", value=825.0, step=25.0)
+        pf_target = st.number_input("Target PF (kg/m³)", 0.1, 2.0, value=1.0, step=0.1)
+        st.write("---")
+        use_subdrill = st.checkbox("Include Subdrill?")
+        subdrill_val = st.number_input("Subdrill Depth (m)", 0.0, 5.0, value=0.5, step=0.1) if use_subdrill else 0.0
         
     with col_in3:
-        # Step=0.1 for PF
-        pf_target = st.number_input("Target PF (kg/m³)", 0.1, 2.0, value=1.0, step=0.1)
-        st.write("") # Spacer
+        st.write("**Advanced Charging**")
+        use_decking = st.checkbox("Use Deck Charging? (2 Decks)")
+        deck_stemming = st.number_input("Mid-Deck Stemming (m)", 0.5, 5.0, value=1.5, step=0.1) if use_decking else 0.0
+        st.write("") 
         submit = st.form_submit_button("🚀 Run Calculation & Predict")
 
 # --- MAIN LOGIC & CALCULATIONS ---
 if submit:
-    # 1. Engineering Math
+    # Engineering Math
     d_m = d_mm / 1000
-    kb, ks = 25, 1.25 # Konya Constants
+    kb, ks = 25, 1.25 
     burden = kb * d_m
     spacing = ks * burden
-    stemming = 0.7 * burden
-    lc = h_total - stemming
-    volume = burden * spacing * h_total
+    primary_stemming = 0.7 * burden
+    total_depth = h_bench + subdrill_val
+    
+    if use_decking:
+        available_charge_len = total_depth - primary_stemming - deck_stemming
+        lc = max(available_charge_len, 0.0)
+        style = "2-Deck Column"
+    else:
+        lc = total_depth - primary_stemming
+        style = "Single Column"
+
+    volume = burden * spacing * h_bench 
     charge_weight = (np.pi * (d_m**2) / 4) * rho_anfo * lc
     actual_pf = charge_weight / volume
 
-    # 2. Results Table
+    # Results Table
     st.markdown("### 📊 Calculated Outcomes")
     res_df = pd.DataFrame({
-        "Parameter": ["Burden (B)", "Spacing (S)", "Stemming (T)", "Charge Length (Lc)", "Volume/Hole", "Charge/Hole"],
-        "Value": [f"{burden:.2f} m", f"{spacing:.2f} m", f"{stemming:.2f} m", f"{lc:.2f} m", f"{volume:.2f} m³", f"{charge_weight:.2f} kg"]
+        "Parameter": ["Burden (B)", "Spacing (S)", "Primary Stemming (T)", "Total Depth", "Charge Style", "Total Charge"],
+        "Value": [f"{burden:.2f} m", f"{spacing:.2f} m", f"{primary_stemming:.2f} m", f"{total_depth:.2f} m", style, f"{charge_weight:.2f} kg"]
     })
     st.table(res_df)
 
-    # 3. PF Tolerance Check
+    # PF Tolerance Check
     st.markdown("### 🧨 Powder Factor Validation")
     tolerance = 0.05
     diff = abs(actual_pf - pf_target)
@@ -101,40 +131,33 @@ if submit:
     else:
         st.error(f"❌ PF Mismatch: Actual ({actual_pf:.2f}) deviates from Target ({pf_target:.2f})")
 
-    # 4. Fragmentation Curve
+    # Fragmentation Curve
     st.divider()
-    st.subheader("📈 Fragmentation Prediction (20-600mm Range)")
+    st.subheader("📈 Fragmentation Prediction (20-600mm)")
     x_sizes = np.linspace(1, 1000, 100)
-    x50 = 350 * (ucs/45)**0.5 # Dynamic X50
-    n_val = 1.3
+    x50 = 380 * (ucs/45)**0.5 
+    n_val = 1.2 if use_decking else 1.0 
     passing = 100 * (1 - np.exp(-0.693 * (x_sizes / x50)**n_val))
     st.line_chart(pd.DataFrame({"Size (mm)": x_sizes, "Passing (%)": passing}).set_index("Size (mm)"))
 
-    # 5. Pattern Visualization (Below Curve)
-    st.subheader("📍 Pattern Visualization")
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.scatter([0, spacing, 0, spacing], [0, 0, burden, burden], color='red', s=200, label='Primary Holes')
-    ax.scatter(spacing/2, burden/2, color='blue', marker='x', s=200, label='Dummy Relief')
-    ax.set_xlabel("Spacing (m)")
-    ax.set_ylabel("Burden (m)")
-    ax.legend()
-    st.pyplot(fig)
-
-    # 6. PDF Report Generation
+    # PDF Report Generation
     report_data = {
         "Diameter (mm)": d_mm,
+        "Total Depth (m)": f"{total_depth:.2f}",
         "Burden (m)": f"{burden:.2f}",
         "Spacing (m)": f"{spacing:.2f}",
-        "Actual PF": f"{actual_pf:.2f}"
+        "Charge (kg)": f"{charge_weight:.2f}",
+        "Style": style
     }
     pdf_file = create_pdf(report_data)
     st.download_button("📄 Download Design Report", data=pdf_file, file_name=f"Blast_Report_{datetime.now().strftime('%H%M')}.pdf")
 
-    # 7. Save to History
+    # Save to History
     st.session_state.history.insert(0, {
         "Time": datetime.now().strftime("%H:%M"),
         "Dia": d_mm,
-        "UCS": ucs,
+        "Style": style,
+        "Subdrill": subdrill_val,
         "Actual PF": round(actual_pf, 2)
     })
 
@@ -147,4 +170,4 @@ if st.session_state.history:
         st.session_state.history = []
         st.rerun()
 else:
-    st.info("👋 Welcome! Please enter your blast parameters above and click 'Run Calculation' to begin.")
+    st.info("👋 Please enter parameters and click 'Run Calculation'.")
