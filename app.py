@@ -135,7 +135,7 @@ chart_data = pd.DataFrame({"Size (mm)": x, "Passing (%)": passing}).set_index("S
 st.line_chart(chart_data)
 st.caption("Figure: Expected Rosin-Rammler distribution for selected design.")
 # Save to History
-    new_entry = {
+new_entry = {
         "Time": datetime.now().strftime("%H:%M:%S"),
         "Dia (mm)": d_mm,
         "UCS (MPa)": ucs,
