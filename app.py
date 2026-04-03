@@ -20,7 +20,7 @@ from reportlab.platypus import (
 # ─────────────────────────────────────────────
 # PAGE CONFIG
 # ─────────────────────────────────────────────
-st.set_page_config(page_title="MUBAS | Blast Designer", page_icon="💥", layout="wide")
+st.set_page_config(page_title="MUBAS | Blast Designer", layout="wide")
 
 # ─────────────────────────────────────────────
 # CSS
