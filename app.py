@@ -446,7 +446,44 @@ def build_pdf(r, figs_bytes, fig_labels):
 # SIDEBAR
 # ─────────────────────────────────────────────
 with st.sidebar:
-    MUBAS_LOGO = (https://lh4.googleusercontent.com/proxy/g7qZrYpTd4YRbNf3lAwYCmDzpJA8QeAlx0j3h94Fhk2sm7WAnIvQuiom-a7hKXLi8mucwVwfRXKilv0fB7oYpCD4epnRd4kBO1fRQT3yk4UExJA
+    MUBAS_LOGO = (
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKIAAACUCAMAAAAnDwKZAAAA/FBMVEX////t15kbgcQAAFEkIFzx"
+        "2pqyscD39vkAAFa9vcltbIwAAEqsnoL235z54p4GA1h9cXLKt4wjJ2MdaagAfMaomH9EQm/m0JagkX5nXWyZma16eZR1ZGmC"
+        "qLoAAEMdGFk0MWemsKjf3uVvboUXFFq1pIS9rIipqLqOgXjaxpIAeceVra8AADcQClQAAD41MF5ynreWiXtOR2WGeXVaUWjJ"
+        "ydNNTXUiTonNyaaLqbJhYII3h8FnmLqMi6IjO3VIQWR5b3m7uZ9Qj8I/N18tJFkALm8AFGYASo0ALnsAOXoTVpcgAE0AJmw"
+        "9T3pWk7z/8KMAbsqyuqkAAC8iIk4YwRYjAAAJCklEQVR4nO2aaVfbSBaGLWvxIpXiAouSZGwZRVVWecGrvGFDMO6kA2n3kP"
+        "n//2VuyYZAJv2hz5mj6jlHbwKqRR8e7ra3wIVCrly5cuXKlStXrly5cuXKlStXrly5cuX6v1No/H1ljNi5NoVareMXfE//i1"
+        "n6ME/THwutQcaIhqppWnDnxOUJrQ20YOLspzEsfaB0/AGe2uCTNYvgWY7xtCwWgrYMxGimKGpsu2Ut8sjQYgLR5goWSGVsj8"
+        "viFduyU1Y5iMGM2GX3PSK6nKIUnxOrLIxIyrVJINGKHM3oe0TdYcKKwQNxMBgvGNqxGsh0NMcOJe+tqNixcLCne3wIbB8+"
+        "2cfglIVIxtziPzm6Zg8CbTBVLDIDxKBcsyfyYhEQZ386+Ii4d06Il6gdaGWXUOJFmjp1TC7yRl5G39lj7JSh/HCuuwOR0UQh"
+        "IhYZ1Ug8EBnNpGb0gzucTuJLQBtM6FRkxcBxxwEM9rEXTD0YlGusJqcudtSoDFLFPzUdHR9vnj9tSLCiR62/o3F5njFi5UPN"
+        "1v+GEFarEhCV/5Kuv3282/mnIHIuvhNO/lGI+ukrZVM9gEOuav0wIznuykPUCXYsSvSfEB10sh2NxxRLRdQVijGHY/rXiDal"
+        "nGPMdImIyMWMcGzhXyLq2GGUEO7JRNRdV3ja8n6JiGLmMsZ4TaoVKabWGDpEit4jpknEmeLiqcNjJNOKDHwZ17DNsI0QUl4R"
+        "xYw4ilKbuhajMq2ogKHYNLYIomPLcvgL4tihFo1tBTufLJ1jRdbpohMdIdfWGcOMc24riL0gxjYnNiXYEniU6yKvs0csT/nl"
+        "5RQuKOBRKC0WpYy9OpoyjukUK4whm4zJp8nDWI6j43LZU6a8JoLNYbrOpoCoC0QPnIxi8K8b1+B6o5YvJcWizT1N4WPOGUEE"
+        "nzJaV2w4AG3IJGITCAVq2eM7bstKF51PFU51Haq3zRnSFfXyfjS6EkUHkgQxTETptC2wsjREOH851oVDKWFcJ+rlVbc7EogE"
+        "Q0GCLQVZiFOsS0LUGSQrE+czBaPpLEUs1psnRMtmojcDC8N7klpaOJt1BGcdETakxEECsZ4iIu6SKcEuJBGHLoJZcqyoYHFs"
+        "UASFJ1gsdqZvEUktvsSYYKxAIgEmk1IXyRgijUEiWHARcLljK28QdUII0BMK+5DXzJKBWANEnUAeU4KEMZHyFlGUIJHrjECY"
+        "EgXLQARHQzuLAQbFUBPpsdN5i8iZDcaDXB5jcRJKSRdiWUwgOtBMUHHre4sIFoSGnAtETi0uqy5Cx8W5bjs61aGRIPoPRKjm"
+        "nApGDKQEIVl1Me20KRIlkRPqjrnyimi7NQsTSyEMMlqXegNEUJShxdZdrmDvPSJBDjmdgzZIXtfNUXr9QzSOPWSrd3hXvK+p"
+        "UG7GswlPu21s0/hBU8vSEAlP/ai4U+Yxu6bW2L0T3QHcdEw9wWg7iLnjWaANJNTFFFHBDAoMQh632RjxO/VhUlbFsVdT7DFs"
+        "IQzJZMf72yBzxCS6FIiY6xRA6P6zS2YetI3xcD/DCNrEgJGJR+AcJ7q7/614dqY2skbUZmlGM2x9ch4+L86//P74NcC6yAwd"
+        "8bj8+BUWIjqeOXH0pVhsn5vbjBHD4YM4QRAaa0+/nRePenyKFQXDxeru23HpPPJoLUrHj9dZ/5myNB8ScfX09rcvgALp2+TB"
+        "u7sMHl8WvlCb/JGOFv0kY8RCNYAr9F3564nlcDg+P9M/cfSGecrpl3R0a5ayRvRVb/b58WjBw0396rm+EcOvgHgrBvX67qYO"
+        "/v3jSFh8WmeOGJrfTu6sF3ej7m5XbNbFbOg9CO7uYfm8fL6pv5rz2s+asFCIzk6Em5vizXLJR/Vi6mxNEIJV73fN3nL0wngW"
+        "ZB6K4Onrl6SAe6lQ77ARQGfnAvv5X1eH1ah+fwrR4iB7P4Ono+BoxW79mTd7h+Vy131B7C6L9dVudKg3V0czLlQJfi4Utq1F"
+        "6ufnVa+4WW02u95KAKVW5N1TEFwdI/FsL8GIYMYLYcb6oXdYXR2ao1Vvc9U7ItZXy1VPaNXju9SI1x0ZhKLupOWlC4irZm+"
+        "0vOl2j46ujzbCrJsDxOONMKI5l2JE0PBJOLUJLWKzOVoeblanWKxvljvobev15WEpEIMPEtL5qFBLGYv1m+X9stktpqlxTJd"
+        "Db7XbPW/S6LyVkytHGdGxCm6e7+973VMFFNTPvc2qd7VpPq8gEM2qLDcLbc20gNeXnLxUwLP0UGzeX+1GTbG4UCOZhCmjsNph"
+        "2Su+Q7zpbcizD87ExdNFKJUw2V4Ewtc3o8N7RKjouxso5YvIrPpZd4pvVbowtsFAeywWX/uFF8Tj0q0aGPskqshDNNalQcUI"
+        "gtsfHeIPRKiHWjAPS5OKIeOAPqq0T7brUugPVO38F4iLSJ0nSckwwdiyEP11sq8Uto1G1Yxe7wcviOe3rXaj0ViHpTu/MpRE"
+        "WBpWtgE8QEl7oC3eId5qajUUe/CTDJOJpDMaLNSqlIwOyOi0AzNavCIungaDebrT6YSF1rYSyOl0grA6LJU6fqqOsd23tMU5"
+        "IJ4vgtaFb5w2/KTgm+FaTr/YSPrv/Bdur1vB7dlZcD3w35Xr0GwkmoQCHpphG0qKdvGiYadQ8u+0IHjolAph+3W9bRT878n"
+        "HrH8ZAZr7HRO8F76RiDfjOv3dTendsvhhzMzNWPl3slZfcyCs+NtGtdrwS6XvfsGAcWPrG8nrfsM0Gll/Zqy0blRaqe+gdK+"
+        "HgfiAHSjaN8zqRTQQYxNmF9tKihlG64qWcV/baYWaaVT8RrvVb6kXH7d+x99WtYGmalEQRHOYd7aNtda67gfrrZFcZG7G0r"
+        "Czbg1a/X7fbFc7SRhWOqLuJNX0k5dto2KkU1jfztXrfv9aVYdQRLNE9IfhGiKvUwlLpbBTnbcD4VrtY9hQwcthpy2mg7N51"
+        "U/ghaTjN6rrZJvlJav0fW0kSWJ0tmu132+ZgJPKXBeAJez0j3MRkNd9c97wxduJ38+wfhsfGx+ParxVtWo2KpWKYc4hud/q9"
+        "eXsEEt/pe2+DZonf7WfHWKuXLly5cqVK1euXLly5cqVK1euXLly5fof6T+2REOXXAWc/AAAAABJRU5ErkJggg=="
     )
     st.markdown(
         f'<img src="{MUBAS_LOGO}" '
