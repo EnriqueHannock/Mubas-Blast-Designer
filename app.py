@@ -17,14 +17,11 @@ from reportlab.platypus import (
     HRFlowable, Image as RLImage, PageBreak
 )
 
-# ─────────────────────────────────────────────
 # PAGE CONFIG
-# ─────────────────────────────────────────────
 st.set_page_config(page_title="MUBAS | Blast Designer", layout="wide")
 
-# ─────────────────────────────────────────────
 # CSS
-# ─────────────────────────────────────────────
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap');
@@ -85,10 +82,7 @@ hr { border-color:#d4b896 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-
-# ─────────────────────────────────────────────
 # COLOUR PALETTE (matplotlib)
-# ─────────────────────────────────────────────
 SAND   = "#f5efe6"
 CREAM  = "#fdf6ee"
 BROWN  = "#7a4a28"
@@ -111,9 +105,7 @@ def _ax(ax, title=""):
     ax.grid(color=TAN, linestyle="--", linewidth=0.5, alpha=0.6)
 
 
-# ─────────────────────────────────────────────
 # BLAST CALCULATIONS
-# ─────────────────────────────────────────────
 def calc(d_mm, h_bench, ucs, rho_anfo, pf_target, subdrill, use_decking, deck_stemming):
     d = d_mm / 1000.0
 
@@ -150,9 +142,8 @@ def calc(d_mm, h_bench, ucs, rho_anfo, pf_target, subdrill, use_decking, deck_st
     )
 
 
-# ─────────────────────────────────────────────
 # FIGURES
-# ─────────────────────────────────────────────
+
 def fig_profile(r):
     fig, ax = plt.subplots(figsize=(3.2, 6.5))
     _ax(ax, "Hole Profile")
@@ -276,9 +267,8 @@ def fig_to_bytes(fig):
     return buf.read()
 
 
-# ─────────────────────────────────────────────
 # PDF GENERATION
-# ─────────────────────────────────────────────
+
 C_SAND   = colors.HexColor("#f5efe6")
 C_CREAM  = colors.HexColor("#fdf6ee")
 C_BROWN  = colors.HexColor("#7a4a28")
@@ -397,6 +387,7 @@ def build_pdf(r, figs_bytes, fig_labels):
     ih = 5.8*cm
 
     # Profile (tall) + pattern side by side
+    
     profile_img = RLImage(io.BytesIO(figs_bytes[0]), width=4.2*cm, height=8.5*cm)
     pattern_img = RLImage(io.BytesIO(figs_bytes[1]), width=iw,     height=ih)
 
@@ -410,6 +401,7 @@ def build_pdf(r, figs_bytes, fig_labels):
     story.append(Spacer(1, 0.3*cm))
 
     # Remaining in pairs
+    
     rest = list(zip(figs_bytes[2:], fig_labels[2:]))
     for i in range(0, len(rest), 2):
         cells_img = []
@@ -428,6 +420,7 @@ def build_pdf(r, figs_bytes, fig_labels):
         story.append(Spacer(1, 0.2*cm))
 
     # Footer
+    
     story.append(Spacer(1, 0.5*cm))
     story.append(HRFlowable(width="100%", thickness=0.5, color=C_TAN))
     story.append(Paragraph(
@@ -442,9 +435,8 @@ def build_pdf(r, figs_bytes, fig_labels):
     return buf.read()
 
 
-# ─────────────────────────────────────────────
 # SIDEBAR
-# ─────────────────────────────────────────────
+
 with st.sidebar:
     MUBAS_LOGO = (
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKIAAACUCAMAAAAnDwKZAAAA/FBMVEX////t15kbgcQAAFEkIFzx"
@@ -507,18 +499,16 @@ with st.sidebar:
     )
 
 
-# ─────────────────────────────────────────────
 # HEADER
-# ─────────────────────────────────────────────
+
 st.markdown('<div class="main-title">Production Blast Planner</div>', unsafe_allow_html=True)
 st.markdown('<div class="main-subtitle">Malawi University of Business and Applied Sciences</div>', unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("---")
 
 
-# ─────────────────────────────────────────────
 # INPUT FORM
-# ─────────────────────────────────────────────
+
 st.markdown('<div class="section-label">Engineering Design Inputs</div>', unsafe_allow_html=True)
 
 with st.form("blast_form"):
@@ -550,9 +540,8 @@ with st.form("blast_form"):
         submit = st.form_submit_button("Generate Design Report", use_container_width=True)
 
 
-# ─────────────────────────────────────────────
 # RESULTS
-# ─────────────────────────────────────────────
+
 if submit:
     r = calc(d_mm, h_bench, ucs, rho_anfo, pf_target,
              subdrill_val, use_decking, deck_stemming)
@@ -595,6 +584,7 @@ if submit:
     st.markdown("---")
 
     # ── Charts
+    
     st.markdown('<div class="section-label">Design Charts</div>', unsafe_allow_html=True)
 
     f1 = fig_profile(r)
@@ -631,6 +621,7 @@ if submit:
         st.caption("Fragmentation Prediction (Kuz-Ram)")
 
     # ── Downloads
+    
     st.markdown("---")
     st.markdown('<div class="section-label">Download Options</div>', unsafe_allow_html=True)
 
